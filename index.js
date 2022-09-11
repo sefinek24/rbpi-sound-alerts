@@ -1,10 +1,8 @@
+require('dotenv').config();
+
 const player = require('play-sound')();
 const { checkNetworkStatus } = require('check-network-status');
 const { cpuTemperature } = require('systeminformation');
-
-player.play('sound/print_complete.wav', err => {
-	if (err) throw err;
-});
 
 setInterval(() => {
 	checkNetworkStatus({
@@ -27,3 +25,11 @@ setInterval(async () => {
 	const temp = await cpuTemperature();
 	console.log(temp);
 }, 2000);
+
+
+
+if (process.env.NODE_ENV === 'production') process.send('ready');
+
+player.play('sound/print_complete.wav', err => {
+	if (err) throw err;
+});

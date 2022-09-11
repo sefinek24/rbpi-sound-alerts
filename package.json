@@ -1,0 +1,16 @@
+{
+  "name": "rbpi-status",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sefinek",
+  "license": "ISC",
+  "dependencies": {
+    "check-network-status": "^1.2.3",
+    "play-sound": "^1.1.5",
+    "systeminformation": "^5.12.6"
+  }
+}

@@ -37,7 +37,6 @@ setInterval(async () => {
 
 setInterval(async () => {
 	const cpuUsage = await cpu();
-	console.log(cpuUsage);
 
 	if (cpuUsage === 100) {
 		return player.play('sound/battery_critical.wav', err => {
@@ -56,6 +55,7 @@ setInterval(async () => {
 
 if (process.env.NODE_ENV === 'production') process.send('ready');
 
+console.log('Ready.');
 player.play('sound/print_complete.wav', err => {
 	if (err) throw err;
 });

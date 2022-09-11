@@ -7,9 +7,8 @@ module.exports = {
 		error_file      : '/home/ubuntu/logs/server/rbpi-status/error.log',
 		out_file        : '/home/ubuntu/logs/server/rbpi-status/out.log',
 
-		max_restarts          : 7,
-		restart_delay         : 7000,
-		shutdown_with_message : true,
+		max_restarts          : 3,
+		restart_delay         : 10000,
 		wait_ready            : true,
 	}],
 };

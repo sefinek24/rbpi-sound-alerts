@@ -2,7 +2,7 @@ require('dotenv').config();
 
 const player = require('play-sound')();
 const { checkNetworkStatus } = require('check-network-status');
-const { cpuTemperature } = require('systeminformation');
+const { cpuTemperature, cpu } = require('systeminformation');
 
 setInterval(() => {
 	checkNetworkStatus({
@@ -11,20 +11,46 @@ setInterval(() => {
 		pingDomain: 'google.pl',
 		method: 'GET',
 	}).then(value => {
-		if (value) {
-			console.log('OK');
-		} else {
+		if (!value) {
 			player.play('sound/chat_message_inbound.wav', err => {
 				if (err) throw err;
 			});
 		}
 	});
-}, 5000);
+}, 25000);
 
 setInterval(async () => {
 	const temp = await cpuTemperature();
-	console.log(temp);
-}, 2000);
+
+	if (temp.main >= 85) {
+		return player.play('sound/battery_critical.wav', err => {
+			if (err) throw err;
+		});
+	}
+
+	if (temp.main >= 80) {
+		return player.play('sound/battery_low.wav', err => {
+			if (err) throw err;
+		});
+	}
+}, 1500);
+
+setInterval(async () => {
+	const cpuUsage = await cpu();
+	console.log(cpuUsage);
+
+	if (cpuUsage === 100) {
+		return player.play('sound/battery_critical.wav', err => {
+			if (err) throw err;
+		});
+	}
+
+	if (cpuUsage >= 80) {
+		return player.play('sound/battery_low.wav', err => {
+			if (err) throw err;
+		});
+	}
+}, 4500);
 
 
 

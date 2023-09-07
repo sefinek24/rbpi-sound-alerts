@@ -29,9 +29,11 @@ const checkAndPlayNetworkStatusSound = async () => {
 const checkAndPlayTemperatureSound = async () => {
 	try {
 		const temp = await cpuTemperature();
-		if (temp.main >= 85) {
+
+		// To be honest, I don't know what the maximum temperatures are for Raspberry Pi 4.
+		if (temp.main >= 82) {
 			playSound('sound/battery_critical.wav');
-		} else if (temp.main >= 80) {
+		} else if (temp.main >= 70) {
 			playSound('sound/battery_low.wav');
 		}
 	} catch (error) {

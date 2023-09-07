@@ -5,5 +5,7 @@ If the device's temperature was too high, a Windows XP system sound would play, 
 
 However, this doesn't work correctly on Windows (probably).
 
+> Generally, this code could be written better, but currently, I have no reason to improve it. I no longer have a Raspberry.
+
 # 📑 License
 This project is licensed under the MIT license. See the [LICENSE](LICENSE) file for more info.

@@ -2,60 +2,51 @@ require('dotenv').config();
 
 const player = require('play-sound')();
 const { checkNetworkStatus } = require('check-network-status');
-const { cpuTemperature, cpu } = require('systeminformation');
+const { cpuTemperature } = require('systeminformation');
 
-setInterval(() => {
-	checkNetworkStatus({
-		timeout: 3000,
-		backUpURL: 'https://google.com',
-		pingDomain: 'google.com',
-		method: 'GET',
-	}).then(value => {
-		if (!value) {
-			player.play('sound/chat_message_inbound.wav', err => {
-				if (err) throw err;
-			});
-		}
+const playSound = soundPath => {
+	player.play(soundPath, err => {
+		if (err) console.error(err);
 	});
-}, 25000);
+};
 
-setInterval(async () => {
-	const temp = await cpuTemperature();
-
-	if (temp.main >= 85) {
-		return player.play('sound/battery_critical.wav', err => {
-			if (err) throw err;
+const checkAndPlayNetworkStatusSound = async () => {
+	try {
+		const isConnected = await checkNetworkStatus({
+			timeout: 3000,
+			backUpURL: 'https://google.com',
+			pingDomain: 'google.com',
+			method: 'GET',
 		});
+		if (!isConnected) {
+			playSound('sound/chat_message_inbound.wav');
+		}
+	} catch (error) {
+		console.error('Error checking network status:', error);
 	}
+};
 
-	if (temp.main >= 80) {
-		return player.play('sound/battery_low.wav', err => {
-			if (err) throw err;
-		});
+const checkAndPlayTemperatureSound = async () => {
+	try {
+		const temp = await cpuTemperature();
+		if (temp.main >= 85) {
+			playSound('sound/battery_critical.wav');
+		} else if (temp.main >= 80) {
+			playSound('sound/battery_low.wav');
+		}
+	} catch (error) {
+		console.error('Error checking CPU temperature:', error);
 	}
-}, 1500);
-
-setInterval(async () => {
-	const cpuUsage = await cpu();
-
-	if (cpuUsage === 100) {
-		return player.play('sound/battery_critical.wav', err => {
-			if (err) throw err;
-		});
-	}
-
-	if (cpuUsage >= 80) {
-		return player.play('sound/battery_low.wav', err => {
-			if (err) throw err;
-		});
-	}
-}, 4500);
+};
 
 
+setInterval(checkAndPlayNetworkStatusSound, 25000);
+setInterval(checkAndPlayTemperatureSound, 1500);
 
-if (process.env.NODE_ENV === 'production') process.send('ready');
+if (process.env.NODE_ENV === 'production') {
+	process.send('ready');
+} else {
+	playSound('sound/print_complete.wav');
+}
 
 console.log('Ready.');
-player.play('sound/print_complete.wav', err => {
-	if (err) throw err;
-});

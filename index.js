@@ -7,8 +7,8 @@ const { cpuTemperature, cpu } = require('systeminformation');
 setInterval(() => {
 	checkNetworkStatus({
 		timeout: 3000,
-		backUpURL: 'https://google.pl',
-		pingDomain: 'google.pl',
+		backUpURL: 'https://google.com',
+		pingDomain: 'google.com',
 		method: 'GET',
 	}).then(value => {
 		if (!value) {

@@ -12,6 +12,6 @@
     "check-network-status": "^1.2.3",
     "dotenv": "^16.4.5",
     "play-sound": "^1.1.6",
-    "systeminformation": "^5.21.22"
+    "systeminformation": "^5.22.0"
   }
 }
